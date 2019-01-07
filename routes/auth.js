@@ -1,9 +1,14 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const authController = require("../controllers/auth");
 
 /* GET users listing. */
 router.get("/", function(req, res, next) {
   res.send("this is auth");
 });
+
+router.post("/login", authController.login);
 
 module.exports = router;

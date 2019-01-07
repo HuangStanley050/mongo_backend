@@ -16,14 +16,17 @@ app.use(bodyParser.json());
 
 app.use(cors());
 //app.use(express.static(path.join(__dirname, "public")));
-app.use("/images", express.static(path.join("images")));
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use("/products", productRoutes);
 app.use("/", authRoutes);
+app.get("*", function(req, res) {
+  res.status(404).json({ error: "Page not found" });
+});
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
-// // next(createError(404));
+// next(createError(404));
 // });
 
 // error handler
