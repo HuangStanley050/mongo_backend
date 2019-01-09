@@ -67,3 +67,44 @@ exports.getProducts = (req, res, next) => {
       //client.close();
     });
 };
+
+exports.updateProduct = (req, res, next) => {
+  const updateProduct = {
+    name: req.body.name,
+    description: req.body.description,
+    price: Decimal128.fromString(req.body.price.toString()), // store this as 128bit decimal in MongoDB
+    image: req.body.image
+  };
+
+  db.getDb()
+    .db()
+    .collection("products")
+    .updateOne({ _id: new ObjectId(req.params.id) }, { $set: updateProduct })
+    .then(result => {
+      //console.log(result);
+      res.status(200).json({
+        message: "Product updated",
+        productId: result.insertedId
+      });
+      //client.close();
+    })
+    .catch(err => {
+      res.status(500).json({ message: err.message });
+      //client.close();
+    });
+};
+
+exports.deleteProduct = (req, res, next) => {
+  db.getDb()
+    .db()
+    .collection("products")
+    .deleteOne({ _id: new ObjectId(req.params.id) })
+    .then(result => {
+      res.status(200).json({
+        message: "Product deleted"
+      });
+    })
+    .catch(err => {
+      res.status(500).json({ message: err.message });
+    });
+};
